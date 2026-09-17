@@ -16,72 +16,67 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfiguration {
 
-    @Value("${allowed.origins:http://localhost:4200}")
-    private String[] allowedOrigins;
+        @Value("${allowed.origins:http://localhost:4200}")
+        private String[] allowedOrigins;
 
-    private final ApiSecurityErrorHandler securityErrorHandler;
+        private final ApiSecurityErrorHandler securityErrorHandler;
 
-    public SecurityConfiguration(ApiSecurityErrorHandler securityErrorHandler) {
-        this.securityErrorHandler = securityErrorHandler;
-    }
+        public SecurityConfiguration(ApiSecurityErrorHandler securityErrorHandler) {
+                this.securityErrorHandler = securityErrorHandler;
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .headers(headers -> headers
-                        .contentTypeOptions(Customizer.withDefaults())
-                        .frameOptions(frame -> frame.deny())
-                        .referrerPolicy(referrer -> referrer.policy(
-                                org.springframework.security.web.header.writers
-                                        .ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)))
-                .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(securityErrorHandler)
-                        .accessDeniedHandler(securityErrorHandler))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/actuator/health",
-                                "/api/products/**",
-                                "/api/product-category/**",
-                                "/api/countries/**",
-                                "/api/states/**")
-                        .permitAll()
-                        .requestMatchers(
-                                "/api/checkout/**",
-                                "/api/orders/**")
-                        .authenticated()
-                        .anyRequest()
-                        .permitAll())
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(Customizer.withDefaults()));
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .cors(Customizer.withDefaults())
+                                .csrf(csrf -> csrf.disable())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .headers(headers -> headers
+                                                .contentTypeOptions(Customizer.withDefaults())
+                                                .frameOptions(frame -> frame.deny())
+                                                .referrerPolicy(referrer -> referrer.policy(
+                                                                org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)))
+                                .exceptionHandling(exceptions -> exceptions
+                                                .authenticationEntryPoint(securityErrorHandler)
+                                                .accessDeniedHandler(securityErrorHandler))
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers(
+                                                                "/api/products",
+                                                                "/api/products/**",
+                                                                "/api/products/search/**")
+                                                .permitAll()
+                                                .requestMatchers(
+                                                                "/api/checkout/**",
+                                                                "/api/orders/**")
+                                                .authenticated()
+                                                .anyRequest()
+                                                .permitAll())
+                                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins));
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "Idempotency-Key"));
-        configuration.setExposedHeaders(Arrays.asList("Location"));
-        configuration.setAllowCredentials(false);
+                configuration.setAllowedOrigins(Arrays.asList(allowedOrigins));
+                configuration.setAllowedMethods(Arrays.asList(
+                                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList(
+                                "Authorization",
+                                "Content-Type",
+                                "Accept",
+                                "Origin",
+                                "Idempotency-Key"));
+                configuration.setExposedHeaders(Arrays.asList("Location"));
+                configuration.setAllowCredentials(false);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", configuration);
+                source.registerCorsConfiguration("/**", configuration);
 
-        return source;
-    }
+                return source;
+        }
 }
