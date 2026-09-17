@@ -1,0 +1,18 @@
+<section class="confirmation-page">
+  <div class="confirmation-card">
+    <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+    <span class="eyebrow">ORDER CONFIRMED</span>
+    <h1>Thanks for your order!</h1>
+    <p>Your payment was successful and we've received your order.</p>
+
+    <div class="tracking" *ngIf="trackingNumber">
+      <span>Tracking number</span>
+      <strong>{{ trackingNumber }}</strong>
+    </div>
+
+    <div class="confirmation-actions">
+      <a routerLink="/order-history" class="primary-action">View my orders</a>
+      <a routerLink="/products" class="secondary-action">Continue shopping</a>
+    </div>
+  </div>
+</section>

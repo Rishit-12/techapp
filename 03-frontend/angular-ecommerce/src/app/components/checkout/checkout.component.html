@@ -1,0 +1,183 @@
+<section class="checkout-page">
+  <div class="page-heading">
+    <div>
+      <span class="eyebrow">SECURE CHECKOUT</span>
+      <h1>Complete your order</h1>
+      <p>Review your details and pay securely with Stripe.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="checkout-state">
+    <div class="spinner-border" role="status"></div>
+    <span>Preparing checkout…</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="checkout-error" role="alert">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    {{ errorMessage }}
+  </div>
+
+  <form *ngIf="!loading && checkoutFormGroup" [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+    <div class="checkout-layout">
+      <div class="checkout-main">
+        <section class="checkout-card">
+          <div class="card-heading">
+            <span class="step">01</span>
+            <div>
+              <h2>Contact information</h2>
+              <p>Where should we send your order updates?</p>
+            </div>
+          </div>
+
+          <div formGroupName="customer" class="form-grid">
+            <label>
+              First name
+              <input formControlName="firstName" type="text" autocomplete="given-name">
+              <small *ngIf="firstName?.invalid && firstName?.touched">Enter your first name.</small>
+            </label>
+            <label>
+              Last name
+              <input formControlName="lastName" type="text" autocomplete="family-name">
+              <small *ngIf="lastName?.invalid && lastName?.touched">Enter your last name.</small>
+            </label>
+            <label class="full">
+              Email
+              <input formControlName="email" type="email" autocomplete="email">
+              <small *ngIf="email?.invalid && email?.touched">Enter a valid email address.</small>
+            </label>
+          </div>
+        </section>
+
+        <section class="checkout-card">
+          <div class="card-heading">
+            <span class="step">02</span>
+            <div>
+              <h2>Shipping address</h2>
+              <p>Where should we deliver your order?</p>
+            </div>
+          </div>
+
+          <div formGroupName="shippingAddress" class="form-grid">
+            <label>
+              Country
+              <select formControlName="country" (change)="getStates('shippingAddress')" autocomplete="country">
+                <option [ngValue]="null">Select country</option>
+                <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+              </select>
+            </label>
+            <label>
+              State
+              <select formControlName="state" autocomplete="address-level1">
+                <option [ngValue]="null">Select state</option>
+                <option *ngFor="let state of shippingAddressStates" [ngValue]="state">{{ state.name }}</option>
+              </select>
+            </label>
+            <label class="full">
+              Street address
+              <input formControlName="street" type="text" autocomplete="street-address">
+            </label>
+            <label>
+              City
+              <input formControlName="city" type="text" autocomplete="address-level2">
+            </label>
+            <label>
+              ZIP / Postal code
+              <input formControlName="zipCode" type="text" autocomplete="postal-code">
+            </label>
+          </div>
+        </section>
+
+        <section class="checkout-card">
+          <div class="billing-toggle">
+            <label>
+              <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">
+              <span>Billing address is the same as shipping</span>
+            </label>
+          </div>
+
+          <div class="card-heading">
+            <span class="step">03</span>
+            <div>
+              <h2>Billing address</h2>
+              <p>Required by the payment provider.</p>
+            </div>
+          </div>
+
+          <div formGroupName="billingAddress" class="form-grid">
+            <label>
+              Country
+              <select formControlName="country" (change)="getStates('billingAddress')">
+                <option [ngValue]="null">Select country</option>
+                <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+              </select>
+            </label>
+            <label>
+              State
+              <select formControlName="state">
+                <option [ngValue]="null">Select state</option>
+                <option *ngFor="let state of billingAddressStates" [ngValue]="state">{{ state.name }}</option>
+              </select>
+            </label>
+            <label class="full">
+              Street address
+              <input formControlName="street" type="text" autocomplete="street-address">
+            </label>
+            <label>
+              City
+              <input formControlName="city" type="text" autocomplete="address-level2">
+            </label>
+            <label>
+              ZIP / Postal code
+              <input formControlName="zipCode" type="text" autocomplete="postal-code">
+            </label>
+          </div>
+        </section>
+
+        <section class="checkout-card">
+          <div class="card-heading">
+            <span class="step">04</span>
+            <div>
+              <h2>Payment</h2>
+              <p>Your card details are handled securely by Stripe.</p>
+            </div>
+          </div>
+
+          <div id="card-element" class="stripe-card"></div>
+          <p *ngIf="!stripeReady && !displayError" class="payment-note">
+            Loading secure card fields…
+          </p>
+          <div *ngIf="displayError" class="field-error" role="alert">{{ displayError }}</div>
+          <p class="payment-note"><i class="fa-solid fa-lock"></i> We never store your full card number.</p>
+        </section>
+      </div>
+
+      <aside class="checkout-summary">
+        <div class="summary-card">
+          <span class="eyebrow">ORDER SUMMARY</span>
+          <h2>{{ totalQuantity }} item{{ totalQuantity === 1 ? '' : 's' }}</h2>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <strong>{{ totalPrice | currency:'INR' }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <strong>FREE</strong>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <strong>{{ totalPrice | currency:'INR' }}</strong>
+          </div>
+
+          <button class="place-order-btn" type="submit" [disabled]="isDisabled">
+            <span *ngIf="!isDisabled">Pay {{ totalPrice | currency:'INR' }}</span>
+            <span *ngIf="isDisabled"><span class="spinner-border spinner-border-sm me-2"></span> Processing…</span>
+          </button>
+
+          <a routerLink="/cart-details" class="back-to-cart">Back to cart</a>
+        </div>
+      </aside>
+    </div>
+  </form>
+</section>

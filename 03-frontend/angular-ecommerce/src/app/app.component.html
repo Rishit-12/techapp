@@ -1,0 +1,43 @@
+<div class="app-shell">
+  <header class="site-header">
+    <div class="topbar">
+      <a routerLink="/products" class="brand" aria-label="TechStore home">
+        <span class="brand-mark"><i class="fa-solid fa-bolt"></i></span>
+        <span>Tech<span>Store</span></span>
+      </a>
+
+      <div class="header-search">
+        <app-search></app-search>
+      </div>
+
+      <div class="header-actions">
+        <app-login-status></app-login-status>
+        <app-cart-status></app-cart-status>
+      </div>
+    </div>
+
+    <nav class="category-bar" aria-label="Product categories">
+      <a routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        All products
+      </a>
+      <app-product-category-menu></app-product-category-menu>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <a routerLink="/products" class="footer-brand">TechStore</a>
+      <p>Technology selected for real life.</p>
+    </div>
+    <div class="footer-links">
+      <a routerLink="/products">Shop</a>
+      <a routerLink="/order-history">Orders</a>
+      <a routerLink="/cart-details">Cart</a>
+    </div>
+    <div class="footer-copy">© {{ currentYear }} TechStore. Demo e-commerce application.</div>
+  </footer>
+</div>

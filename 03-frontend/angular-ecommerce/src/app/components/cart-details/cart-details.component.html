@@ -1,0 +1,70 @@
+<section class="cart-page">
+  <div class="page-heading">
+    <div>
+      <span class="eyebrow">YOUR SHOPPING BAG</span>
+      <h1>Cart</h1>
+    </div>
+    <a routerLink="/products" class="continue-link">
+      <i class="fa-solid fa-arrow-left"></i> Continue shopping
+    </a>
+  </div>
+
+  <div *ngIf="cartItems.length; else emptyCart" class="cart-layout">
+    <div class="cart-items">
+      <article *ngFor="let item of cartItems" class="cart-item">
+        <a [routerLink]="['/products', item.id]" class="cart-image">
+          <img [src]="item.imageUrl || 'assets/images/products/placeholder.png'" [alt]="item.name">
+        </a>
+
+        <div class="cart-item-info">
+          <a [routerLink]="['/products', item.id]" class="cart-name">{{ item.name }}</a>
+          <span class="unit-price">{{ item.unitPrice | currency:'INR' }} each</span>
+
+          <div class="quantity-control">
+            <button (click)="decrementQuantity(item)" aria-label="Decrease quantity">−</button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="incrementQuantity(item)" [disabled]="item.quantity >= 50" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <div class="cart-item-total">
+          <strong>{{ item.unitPrice * item.quantity | currency:'INR' }}</strong>
+          <button class="remove-btn" (click)="remove(item)">Remove</button>
+        </div>
+      </article>
+    </div>
+
+    <aside class="summary-card">
+      <span class="eyebrow">ORDER SUMMARY</span>
+      <h2>Ready to checkout?</h2>
+
+      <div class="summary-row">
+        <span>Items ({{ totalQuantity }})</span>
+        <strong>{{ totalPrice | currency:'INR' }}</strong>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <strong>FREE</strong>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <strong>{{ totalPrice | currency:'INR' }}</strong>
+      </div>
+
+      <a routerLink="/checkout" class="checkout-btn">
+        Secure checkout <i class="fa-solid fa-arrow-right"></i>
+      </a>
+      <p class="secure-note"><i class="fa-solid fa-lock"></i> Secure payment powered by Stripe</p>
+    </aside>
+  </div>
+</section>
+
+<ng-template #emptyCart>
+  <div class="empty-cart">
+    <div class="empty-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+    <h2>Your cart is empty</h2>
+    <p>Find something you love and add it to your cart.</p>
+    <a routerLink="/products" class="checkout-btn">Start shopping</a>
+  </div>
+</ng-template>

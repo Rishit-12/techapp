@@ -1,0 +1,5 @@
+<form class="search-form" (submit)="$event.preventDefault(); doSearch(myInput.value)">
+  <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+  <input #myInput type="search" placeholder="Search laptops, headphones, accessories…" aria-label="Search products">
+  <button type="submit">Search</button>
+</form>

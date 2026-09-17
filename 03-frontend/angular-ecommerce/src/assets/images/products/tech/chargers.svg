@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#cbd5e1"/></linearGradient></defs>
+  <rect width="800" height="600" rx="40" fill="#f8fafc"/>
+  <rect x="90" y="70" width="620" height="460" rx="36" fill="url(#g)"/>
+  <circle cx="400" cy="270" r="100" fill="#111827"/>
+  <text x="400" y="265" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#fff">CHARGER</text>
+  <text x="400" y="312" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#cbd5e1">TECHSTORE</text>
+</svg>

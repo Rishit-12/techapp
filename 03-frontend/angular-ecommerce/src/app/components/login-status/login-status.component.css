@@ -1,0 +1,36 @@
+.login-status-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.welcome-user,
+.orders-link {
+  color: #334155;
+  font-size: .84rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.welcome-user i {
+  margin-right: 4px;
+}
+
+.security-btn {
+  border-radius: 9px;
+  padding: 9px 13px;
+  background: #111827;
+  color: #fff;
+  font-size: .84rem;
+  font-weight: 700;
+}
+
+.security-btn.secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+@media (max-width: 650px) {
+  .welcome-user { display: none; }
+  .orders-link { display: none; }
+}

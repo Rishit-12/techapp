@@ -1,0 +1,68 @@
+<section *ngIf="loading" class="detail-state">
+  <div class="spinner-border" role="status"></div>
+  <span>Loading product…</span>
+</section>
+
+<section *ngIf="errorMessage && !loading" class="detail-state error">
+  <i class="fa-solid fa-circle-exclamation"></i>
+  <span>{{ errorMessage }}</span>
+  <a routerLink="/products" class="btn btn-dark btn-sm">Back to shop</a>
+</section>
+
+<section *ngIf="product && !loading" class="product-detail-page">
+  <a routerLink="/products" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to shop</a>
+
+  <div class="detail-grid">
+    <div class="detail-image">
+      <span *ngIf="product.discountPrice" class="deal-badge">LIMITED DEAL</span>
+      <img [src]="product.imageUrl || 'assets/images/products/placeholder.png'" [alt]="product.name">
+    </div>
+
+    <div class="detail-copy">
+      <span class="brand">{{ product.brand || 'TechStore' }}</span>
+      <h1>{{ product.name }}</h1>
+
+      <div class="rating" *ngIf="product.rating">
+        <i class="fa-solid fa-star"></i>
+        {{ product.rating | number:'1.1-1' }}
+        <span>({{ product.reviewCount || 0 }} reviews)</span>
+      </div>
+
+      <div class="detail-price">
+        <strong>{{ (product.discountPrice || product.unitPrice) | currency:'INR' }}</strong>
+        <span *ngIf="product.discountPrice">{{ product.unitPrice | currency:'INR' }}</span>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <div class="stock-line" [class.out]="product.unitsInStock <= 0">
+        <i class="fa-solid" [class.fa-circle-check]="product.unitsInStock > 0" [class.fa-circle-xmark]="product.unitsInStock <= 0"></i>
+        {{ product.unitsInStock > 0 ? product.unitsInStock + ' units available' : 'Currently out of stock' }}
+      </div>
+
+      <div class="purchase-row" *ngIf="product.unitsInStock > 0">
+        <div class="quantity-control">
+          <button (click)="decrease()">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="increase()" [disabled]="quantity >= product.unitsInStock || quantity >= 50">+</button>
+        </div>
+        <button class="add-to-cart" (click)="addToCart()">
+          <i class="fa-solid fa-cart-plus"></i> Add to cart
+        </button>
+      </div>
+
+      <div class="trust-grid">
+        <div><i class="fa-solid fa-truck"></i><span>Free delivery</span></div>
+        <div><i class="fa-solid fa-shield-halved"></i><span>Secure checkout</span></div>
+        <div><i class="fa-solid fa-headset"></i><span>Support when needed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="description-card">
+    <span class="eyebrow">PRODUCT DETAILS</span>
+    <h2>About this product</h2>
+    <p>{{ product.description }}</p>
+    <div class="sku">SKU: {{ product.sku }}</div>
+  </div>
+</section>

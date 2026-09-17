@@ -1,0 +1,9 @@
+<div class="login-status-header">
+  <span *ngIf="isAuthenticated" class="welcome-user">
+    <i class="fa-regular fa-circle-user"></i>
+    {{ userFullName || 'Account' }}
+  </span>
+  <button *ngIf="!isAuthenticated" (click)="login()" class="security-btn">Sign in</button>
+  <button *ngIf="isAuthenticated" (click)="logout()" class="security-btn secondary">Sign out</button>
+  <a *ngIf="isAuthenticated" routerLink="/order-history" class="orders-link">Orders</a>
+</div>

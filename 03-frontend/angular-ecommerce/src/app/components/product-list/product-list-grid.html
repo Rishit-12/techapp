@@ -1,0 +1,108 @@
+<section class="store-hero" *ngIf="!searchMode && thePageNumber === 1">
+  <div>
+    <span class="eyebrow">NEXT-GEN TECH, SIMPLIFIED</span>
+    <h1>Upgrade the way you work, play and connect.</h1>
+    <p>Discover thoughtfully selected laptops, audio, accessories and smart devices with dependable delivery.</p>
+    <a routerLink="/products" class="hero-btn">Shop technology <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <i class="fa-solid fa-laptop"></i>
+    <i class="fa-solid fa-headphones"></i>
+    <i class="fa-solid fa-mobile-screen-button"></i>
+  </div>
+</section>
+
+<section class="store-section">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">{{ searchMode ? 'SEARCH RESULTS' : 'CURATED FOR YOU' }}</span>
+      <h2>{{ searchMode ? 'Results for “' + searchKeyword + '”' : 'Featured technology' }}</h2>
+      <p>{{ theTotalElements }} products available</p>
+    </div>
+
+    <div class="catalog-controls">
+      <label>
+        Sort
+        <select [value]="sort" (change)="updateSort($any($event.target).value)">
+          <option value="featured">Featured</option>
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="newest">Newest</option>
+          <option value="rating">Top rated</option>
+          <option value="name">Name</option>
+        </select>
+      </label>
+      <label>
+        Per page
+        <select [value]="thePageSize" (change)="updatePageSize($any($event.target).value)">
+          <option value="8">8</option>
+          <option value="12">12</option>
+          <option value="20">20</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="state-card">
+    <div class="spinner-border" role="status"></div>
+    <span>Loading products…</span>
+  </div>
+
+  <div *ngIf="errorMessage && !loading" class="state-card error-state" role="alert">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span>{{ errorMessage }}</span>
+    <button class="btn btn-dark btn-sm" (click)="listProducts()">Try again</button>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && products.length" class="product-grid">
+    <article *ngFor="let product of products" class="product-card">
+      <a [routerLink]="['/products', product.id]" class="product-image-wrap">
+        <img [src]="product.imageUrl || 'assets/images/products/placeholder.png'" [alt]="product.name" loading="lazy">
+        <span *ngIf="product.unitsInStock <= 0" class="stock-badge">Out of stock</span>
+        <span *ngIf="product.discountPrice && product.discountPrice < product.unitPrice" class="deal-badge">DEAL</span>
+      </a>
+
+      <div class="product-card-body">
+        <span class="product-brand">{{ product.brand || 'TechStore' }}</span>
+        <a [routerLink]="['/products', product.id]" class="product-name">{{ product.name }}</a>
+
+        <div class="rating" *ngIf="product.rating">
+          <i class="fa-solid fa-star"></i>
+          {{ product.rating | number:'1.1-1' }}
+          <span>({{ product.reviewCount || 0 }})</span>
+        </div>
+
+        <div class="price-row">
+          <span class="current-price">{{ (product.discountPrice || product.unitPrice) | currency:'INR' }}</span>
+          <span class="old-price" *ngIf="product.discountPrice">{{ product.unitPrice | currency:'INR' }}</span>
+        </div>
+
+        <button
+          class="add-btn"
+          [disabled]="product.unitsInStock <= 0"
+          (click)="addToCart(product)">
+          <i class="fa-solid fa-cart-plus"></i>
+          {{ product.unitsInStock > 0 ? 'Add to cart' : 'Out of stock' }}
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && !products.length" class="state-card empty-state">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <h3>No products found</h3>
+    <p>Try another search term or browse a different category.</p>
+    <a routerLink="/products" class="btn btn-dark">Browse all products</a>
+  </div>
+
+  <div *ngIf="!loading && theTotalElements > 0" class="pagination-wrap">
+    <ngb-pagination
+      [(page)]="thePageNumber"
+      [pageSize]="thePageSize"
+      [collectionSize]="theTotalElements"
+      [maxSize]="5"
+      [boundaryLinks]="true"
+      (pageChange)="listProducts()">
+    </ngb-pagination>
+  </div>
+</section>

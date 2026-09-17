@@ -1,0 +1,48 @@
+<section class="orders-page">
+  <div class="page-heading">
+    <div>
+      <span class="eyebrow">ACCOUNT</span>
+      <h1>Your orders</h1>
+      <p>Track your recent purchases in one place.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="orders-state">
+    <div class="spinner-border" role="status"></div>
+    <span>Loading your orders…</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="orders-state error" role="alert">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && orderHistoryList.length" class="orders-list">
+    <article *ngFor="let order of orderHistoryList" class="order-card">
+      <div class="order-main">
+        <span class="order-label">ORDER</span>
+        <strong>{{ order.orderTrackingNumber }}</strong>
+        <span class="order-date">{{ order.dateCreated | date:'mediumDate' }}</span>
+      </div>
+      <div>
+        <span class="order-label">STATUS</span>
+        <strong class="status-pill">{{ order.status || 'PLACED' }}</strong>
+      </div>
+      <div>
+        <span class="order-label">ITEMS</span>
+        <strong>{{ order.totalQuantity }}</strong>
+      </div>
+      <div class="order-total">
+        <span class="order-label">TOTAL</span>
+        <strong>{{ order.totalPrice | currency:'INR' }}</strong>
+      </div>
+    </article>
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && !orderHistoryList.length" class="orders-state">
+    <i class="fa-solid fa-box-open"></i>
+    <h3>No orders yet</h3>
+    <p>Your completed purchases will appear here.</p>
+    <a routerLink="/products" class="btn btn-dark btn-sm">Start shopping</a>
+  </div>
+</section>

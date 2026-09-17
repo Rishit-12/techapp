@@ -1,0 +1,27 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (tempProduct of products; track tempProduct.sku) {
+<tr>
+  <td class="align-middle">
+    <img [src]="tempProduct.imageUrl" height="50">
+  </td>
+  <td class="align-middle">{{ tempProduct.name }}</td>
+  <td class="align-middle">{{ tempProduct.unitPrice | currency:'INR' }}</td>
+  <td class="align-middle">{{ tempProduct.unitsInStock }}</td>
+</tr>
+}
+    </tbody>
+
+  </table>
+</div>
