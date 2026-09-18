@@ -42,7 +42,7 @@ export class LoginStatusComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.auth.logout({
-      logoutParams: { returnTo: this.doc.location.origin }
+      logoutParams: { returnTo: `${this.doc.location.origin}/login` }
     });
   }
 }

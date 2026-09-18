@@ -5,7 +5,7 @@ export default {
     domain: environment.auth0Domain,
     clientId: environment.auth0ClientId,
     authorizationParams: {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/login`,
       audience: environment.auth0Audience,
       scope: 'openid profile email',
     },
