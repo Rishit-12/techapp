@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class LoginStatusComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userFullName?: string;
+  loginError = '';
   private subscriptions = new Subscription();
 
   constructor(
@@ -36,11 +37,14 @@ export class LoginStatusComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  login(): void {
+  login(event: Event): void {
+    event.preventDefault();
+    this.loginError = '';
     this.auth.loginWithRedirect();
   }
 
-  logout(): void {
+  logout(event: Event): void {
+    event.preventDefault();
     this.auth.logout({
       logoutParams: { returnTo: `${this.doc.location.origin}/login` }
     });

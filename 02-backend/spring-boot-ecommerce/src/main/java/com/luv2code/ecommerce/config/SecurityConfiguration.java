@@ -52,7 +52,13 @@ public class SecurityConfiguration {
                                                 .authenticated()
                                                 .anyRequest()
                                                 .permitAll())
+<<<<<<< HEAD
                                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+=======
+                                .oauth2ResourceServer(oauth2 -> oauth2
+                                                .jwt(Customizer.withDefaults())
+                                                .authenticationEntryPoint(securityErrorHandler));
+>>>>>>> 9c3744b (Fix checkout payment and Auth0 authentication)
 
                 return http.build();
         }

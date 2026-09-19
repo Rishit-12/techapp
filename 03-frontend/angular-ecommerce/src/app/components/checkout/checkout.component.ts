@@ -50,7 +50,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private checkoutService: CheckoutService,
     private router: Router,
     private auth: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -510,6 +510,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
      * - Stripe card element is mounted
      * - card has no validation errors
      */
+    console.log('========== PAY BUTTON CLICKED ==========');
+    console.log('Form valid:', this.checkoutFormGroup.valid);
+    console.log('Stripe:', this.stripe);
+    console.log('Card Element:', this.cardElement);
+    console.log('Stripe Ready:', this.stripeReady);
+    console.log('Display Error:', this.displayError);
+    console.log('Cart items:', this.cartService.cartItems);
+
     if (
       this.checkoutFormGroup.invalid ||
       !this.stripe ||
@@ -517,6 +525,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       !this.stripeReady ||
       this.displayError
     ) {
+      console.log('PAYMENT BLOCKED BEFORE API CALL');
 
       this.checkoutFormGroup.markAllAsTouched();
 

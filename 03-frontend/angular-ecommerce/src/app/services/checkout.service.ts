@@ -11,14 +11,28 @@ export class CheckoutService {
   private purchaseUrl = `${environment.luv2shopApiUrl}/checkout/purchase`;
   private paymentIntentUrl = `${environment.luv2shopApiUrl}/checkout/payment-intent`;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   placeOrder(purchase: Purchase): Observable<{ orderTrackingNumber: string }> {
     return this.httpClient.post<{ orderTrackingNumber: string }>(this.purchaseUrl, purchase);
   }
 
-  createPaymentIntent(purchase: Purchase, idempotencyKey: string): Observable<any> {
-    const headers = new HttpHeaders({ 'Idempotency-Key': idempotencyKey });
-    return this.httpClient.post<any>(this.paymentIntentUrl, purchase, { headers });
+  createPaymentIntent(
+    purchase: Purchase,
+    idempotencyKey: string
+  ): Observable<any> {
+
+    console.log('BEFORE HTTP REQUEST');
+    console.log('URL:', this.paymentIntentUrl);
+
+    const headers = new HttpHeaders({
+      'Idempotency-Key': idempotencyKey
+    });
+
+    return this.httpClient.post<any>(
+      this.paymentIntentUrl,
+      purchase,
+      { headers }
+    );
   }
 }

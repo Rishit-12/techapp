@@ -3,7 +3,8 @@
     <i class="fa-regular fa-circle-user"></i>
     {{ userFullName || 'Account' }}
   </span>
-  <button *ngIf="!isAuthenticated" (click)="login()" class="security-btn">Sign in</button>
-  <button *ngIf="isAuthenticated" (click)="logout()" class="security-btn secondary">Sign out</button>
+  <button *ngIf="!isAuthenticated" type="button" (click)="login($event)" class="security-btn">Sign in</button>
+  <button *ngIf="isAuthenticated" type="button" (click)="logout($event)" class="security-btn secondary">Sign out</button>
   <a *ngIf="isAuthenticated" routerLink="/order-history" class="orders-link">Orders</a>
+  <span *ngIf="loginError" class="login-error" role="alert">{{ loginError }}</span>
 </div>
